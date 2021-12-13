@@ -4,7 +4,21 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+celery = "*"
+channels = "*"
+channels-redis = "*"
 django = "*"
+django-celery-email = "*"
+django-cors-headers = "*"
+django-debug-toolbar = "*"
+django-environ = "*"
+django-model-utils = "*"
+django-storages = "*"
+djangorestframework = "*"
+djangorestframework-simplejwt = "*"
+redis = "*"
+sentry-sdk = "*"
+whitenoise = "*"
 
 [dev-packages]
 
