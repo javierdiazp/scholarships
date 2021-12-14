@@ -56,6 +56,7 @@ INSTALLED_APPS = [
 
     # Project apps
     'accounts',
+    'loans',
 ]
 
 MIDDLEWARE = [
@@ -194,6 +195,8 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'UPDATE_LAST_LOGIN': True
 }
+
+MAX_LOANS_PER_USER = env.int('MAX_LOANS_PER_USER')
 
 # Storage
 if LOCAL:
