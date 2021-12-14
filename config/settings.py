@@ -53,6 +53,9 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'djcelery_email',
     'rest_framework',
+
+    # Project apps
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -99,8 +102,8 @@ DATABASES = {
         'NAME': env('SQL_DATABASE'),
         'USER': env('SQL_USER'),
         'PASSWORD': env('SQL_PASSWORD'),
-        'HOST': env('SQL_HOST', 'localhost'),
-        'PORT': env('SQL_PORT', '5432'),
+        'HOST': env('SQL_HOST'),
+        'PORT': env('SQL_PORT'),
     }
 }
 
