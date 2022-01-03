@@ -56,6 +56,7 @@ INSTALLED_APPS = [
 
     # Project apps
     'accounts',
+    'scholarships',
 ]
 
 MIDDLEWARE = [
