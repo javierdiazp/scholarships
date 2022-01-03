@@ -1,18 +1,18 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.password_validation import validate_password, password_changed
+from django.contrib.auth.password_validation import password_changed, validate_password
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core import exceptions
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils.encoding import force_bytes, force_str
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.translation import gettext as _
+from rest_framework import generics
 from rest_framework.exceptions import ValidationError
-from rest_framework.generics import GenericAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from accounts.serializers import EmailSerializer, UIDTokenSerializer, ResetPasswordSerializer, UpdatePasswordSerializer
+from accounts import serializers
 from mail import send_fake_mail
 
 User = get_user_model()
@@ -32,8 +32,8 @@ def validate_token(user, token):
         raise Http404
 
 
-class ResetPasswordRequestToken(GenericAPIView):
-    serializer_class = EmailSerializer
+class ResetPasswordRequestToken(generics.GenericAPIView):
+    serializer_class = serializers.EmailSerializer
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -56,8 +56,8 @@ class ResetPasswordRequestToken(GenericAPIView):
         return Response({'detail': _('Email sent')})
 
 
-class ResetPasswordValidateToken(GenericAPIView):
-    serializer_class = UIDTokenSerializer
+class ResetPasswordValidateToken(generics.GenericAPIView):
+    serializer_class = serializers.UIDTokenSerializer
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
@@ -72,8 +72,8 @@ class ResetPasswordValidateToken(GenericAPIView):
         return Response({'detail': _('Token valid')})
 
 
-class ResetPasswordConfirm(GenericAPIView):
-    serializer_class = ResetPasswordSerializer
+class ResetPasswordConfirm(generics.GenericAPIView):
+    serializer_class = serializers.ResetPasswordSerializer
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
@@ -99,9 +99,9 @@ class ResetPasswordConfirm(GenericAPIView):
         return Response({'detail': _('Password changed')})
 
 
-class UpdatePasswordAPIView(UpdateAPIView):
+class UpdatePasswordAPIView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = UpdatePasswordSerializer
+    serializer_class = serializers.UpdatePasswordSerializer
 
     def get_object(self):
         """Retrieve and return authenticated user"""
@@ -110,3 +110,7 @@ class UpdatePasswordAPIView(UpdateAPIView):
     def update(self, request, *args, **kwargs):
         super().update(request, *args, **kwargs)
         return Response({"detail": _("Password changed")})
+
+
+class CandidateCreateAPIView(generics.CreateAPIView):
+    serializer_class = serializers.CandidateSerializer

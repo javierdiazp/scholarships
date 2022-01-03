@@ -17,8 +17,8 @@ class UIDTokenSerializer(serializers.Serializer):
 
 
 class PasswordSerializer(serializers.Serializer):
-    new_password = serializers.CharField(label=_('New password'))
-    new_password_validation = serializers.CharField(label=_('Confirm new password'))
+    password = serializers.CharField(label=_('Password'))
+    password_validation = serializers.CharField(label=_('Confirm password'))
 
     def validate_new_password(self, value):
         user = self.context['request'].user
@@ -31,11 +31,11 @@ class PasswordSerializer(serializers.Serializer):
         return value
 
     def validate(self, attrs):
-        new_password = attrs['new_password']
-        new_password_validation = attrs['new_password_validation']
+        password = attrs['password']
+        password_validation = attrs['password_validation']
 
-        if new_password != new_password_validation:
-            raise serializers.ValidationError(_('New passwords must match'))
+        if password != password_validation:
+            raise serializers.ValidationError(_('Passwords must match'))
 
         return attrs
 
@@ -58,7 +58,28 @@ class UpdatePasswordSerializer(PasswordSerializer):
 
     def update(self, instance, validated_data):
         user = instance
-        user.set_password(validated_data['new_password'])
+        user.set_password(validated_data['password'])
         user.save()
 
         return user
+
+
+class CandidateSerializer(serializers.ModelSerializer, PasswordSerializer):
+    class Meta:
+        model = User
+
+        fields = [
+            'email',
+            'password',
+            'password_validation',
+            'first_name',
+            'last_name',
+        ]
+
+    def to_representation(self, instance):
+        refresh_token, access_token = instance.get_jwt_tokens()
+        return {'access': str(access_token), 'refresh': str(refresh_token)}
+
+    def create(self, validated_data):
+        validated_data.pop('password_validation')
+        return User.create_user(**validated_data, is_candidate=True)
