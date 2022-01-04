@@ -25,7 +25,7 @@ class ScholarshipViewSet(viewsets.ModelViewSet):
                 }
                 qs = qs.annotate(**rooms_by_status)
 
-            qs = qs.order_by('-is_active', '-created_at')
+            qs = qs.order_by('-is_active', '-created')
 
         else:
             qs = qs.filter(is_active=True)

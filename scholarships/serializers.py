@@ -19,6 +19,8 @@ class RequiredDocumentSerializer(serializers.ModelSerializer):
 
 
 class ScholarshipSerializer(serializers.ModelSerializer):
+    admin = serializers.SlugRelatedField(slug_field='email', read_only=True)
+
     evaluators = serializers.SlugRelatedField(queryset=User.objects.filter(is_evaluator=True),
                                               slug_field='email', many=True)
 
@@ -34,8 +36,6 @@ class ScholarshipSerializer(serializers.ModelSerializer):
             'is_active',
             'created',
         ]
-
-        read_only_fields = ['admin']
 
     def update(self, instance, validated_data):
         if 'is_active' in validated_data:
