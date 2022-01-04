@@ -82,4 +82,4 @@ class CandidateSerializer(serializers.ModelSerializer, PasswordSerializer):
 
     def create(self, validated_data):
         validated_data.pop('password_validation')
-        return User.create_user(**validated_data, is_candidate=True)
+        return User.objects.create_user(**validated_data, is_candidate=True)
