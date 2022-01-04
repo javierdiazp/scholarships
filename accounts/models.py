@@ -35,9 +35,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     """ Custom user model that supports using email instead of username """
     email = models.EmailField(_('email address'), unique=True)
 
-    first_name = models.CharField(_('first name'), max_length=150, blank=True)
+    first_name = models.CharField(_('first name'), max_length=150)
 
-    last_name = models.CharField(_('last name'), max_length=150, blank=True)
+    last_name = models.CharField(_('last name'), max_length=150)
 
     is_staff = models.BooleanField(
         _('staff status'),
