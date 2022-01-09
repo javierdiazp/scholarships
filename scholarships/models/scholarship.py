@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.utils.text import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from model_utils.models import SoftDeletableModel, TimeStampedModel, UUIDModel
 
 User = get_user_model()
@@ -9,7 +9,7 @@ User = get_user_model()
 class Scholarship(UUIDModel, TimeStampedModel, SoftDeletableModel):
     name = models.CharField(_('name'), max_length=255)
 
-    description = models.TextField(_('description'), max_length=600)
+    description = models.TextField(_('description'), max_length=600, blank=True)
 
     admin = models.ForeignKey(User, verbose_name=_('admin'), null=True,
                               related_name='scholarships_created', on_delete=models.SET_NULL)

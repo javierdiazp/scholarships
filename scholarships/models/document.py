@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils.text import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from model_utils.models import SoftDeletableModel, TimeStampedModel, UUIDModel
 
 from scholarships.models.scholarship import Scholarship
@@ -11,7 +11,7 @@ class RequiredDocument(UUIDModel, TimeStampedModel, SoftDeletableModel):
 
     name = models.CharField(_('name'), max_length=50)
 
-    description = models.TextField(_('description'), max_length=300)
+    description = models.TextField(_('description'), max_length=300, blank=True)
 
     attachment = models.FileField(_('file'), upload_to='attachments', blank=True)
 

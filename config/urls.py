@@ -20,6 +20,7 @@ from django.urls import include, path
 api_patterns = [
     path('accounts/', include('accounts.urls')),
     path('scholarships/', include('scholarships.urls')),
+    path('rooms/', include('rooms.urls')),
 ]
 
 urlpatterns = [
